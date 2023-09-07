@@ -40,14 +40,14 @@ app.get("/schedules", async (req, res) => {
           latestCount = 1;
           latest = true;
         }
+
         const obj = {
-          id: id,
-          latest: latest,
+          id,
+          latest,
           date: properties.date.date.start,
           isHome: properties.home.checkbox,
           hour: properties.hour.number,
           time: properties.time.number,
-          passed: properties.passed.formula.boolean,
           standard: properties.standard.checkbox,
           location: properties.location.rich_text.length
             ? properties.location.rich_text[0].text.content
@@ -62,7 +62,16 @@ app.get("/schedules", async (req, res) => {
             ? properties.place.rich_text[0].text.content
             : null,
         };
-        result[key] = result[key] ? [...result[key], obj] : [obj];
+
+        result[key] = result[key]
+          ? {
+              passed: result[key].passed && properties.passed.formula.boolean,
+              data: [...result[key].data, obj],
+            }
+          : {
+              passed: properties.passed.formula.boolean,
+              data: [obj],
+            };
       });
 
       res.status(200).send(result);
