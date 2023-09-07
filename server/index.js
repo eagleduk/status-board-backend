@@ -47,6 +47,8 @@ app.get("/schedules", async (req, res) => {
           isHome: properties.home.checkbox,
           hour: properties.hour.number,
           time: properties.time.number,
+          passed: properties.passed.formula.boolean,
+          standard: properties.standard.checkbox,
           location: properties.location.rich_text.length
             ? properties.location.rich_text[0].text.content
             : null,
